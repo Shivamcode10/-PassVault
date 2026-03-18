@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000";
+// ✅ Use environment variable (Vercel + Local)
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 // 🔐 TOKEN IN MEMORY (NOT localStorage)
 let authToken: string | null = null;
 
+// ✅ Axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -33,7 +35,6 @@ export const signup = (name: string, email: string, password: string) =>
 export const login = (email: string, password: string) =>
   api.post("/api/auth/login", { email, password });
 
-// 🔐 OTP VERIFY
 export const verifyOTP = (email: string, otp: string) =>
   api.post("/api/auth/verify-otp", { email, otp });
 
@@ -59,11 +60,9 @@ export const updateProfile = (data: any) =>
 export const changePassword = (data: any) =>
   api.put("/api/auth/change-password", data);
 
-// 🔐 2FA TOGGLE
 export const toggle2FA = (enabled: boolean) =>
   api.put("/api/user/toggle-2fa", { enabled });
 
-// 🔐 AUTO LOCK TOGGLE
 export const toggleAutoLock = (enabled: boolean) =>
   api.put("/api/user/toggle-autolock", { enabled });
 
