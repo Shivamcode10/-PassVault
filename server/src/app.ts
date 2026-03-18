@@ -12,39 +12,32 @@ const app = express();
 
 /* ================= SECURITY ================= */
 
-// ✅ Helmet (secure headers)
+// ✅ Helmet
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
   })
 );
 
-// ✅ CORS (FIXED FOR VERCEL + LOCAL)
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "https://pass-vault-alpha.vercel.app", // 🔥 your frontend
-];
-
+// ✅ CORS (FINAL FIX)
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like Postman)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("CORS not allowed"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://pass-vault-alpha.vercel.app",
+    ],
     credentials: true,
   })
 );
 
-// ✅ Rate Limiter
+// 🔥 Allow preflight (VERY IMPORTANT)
+app.options("*", cors());
+
+/* ================= RATE LIMIT ================= */
+
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 min
+  windowMs: 15 * 60 * 1000,
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
@@ -67,7 +60,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/passwords", passwordRoutes);
 app.use("/api/user", userRoutes);
 
-/* ================= ROOT (IMPORTANT) ================= */
+/* ================= ROOT ================= */
 
 app.get("/", (req, res) => {
   res.send("PassVault Backend Running 🚀");
