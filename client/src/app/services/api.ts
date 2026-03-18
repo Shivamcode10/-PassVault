@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// ✅ Use environment variable (Vercel + Local)
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+// ✅ Use environment variable (fallback for safety)
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // 🔐 TOKEN IN MEMORY (NOT localStorage)
 let authToken: string | null = null;
@@ -16,13 +17,13 @@ const api = axios.create({
 
 // 🔐 Attach token automatically
 api.interceptors.request.use((config) => {
-  if (authToken) {
+  if (authToken && config.headers) {
     config.headers.Authorization = `Bearer ${authToken}`;
   }
   return config;
 });
 
-// 🔐 SET TOKEN (IN MEMORY ONLY)
+// 🔐 SET TOKEN
 export const setAuthToken = (token: string | null) => {
   authToken = token;
 };
