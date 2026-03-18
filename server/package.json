@@ -4,7 +4,7 @@
   "description": "Backend for PassVault password manager",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "npx kill-port 5000 && nodemon src/server.ts",
+    "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "jest"
@@ -43,6 +43,7 @@
     "kill-port": "^2.0.1",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   },
   "type": "commonjs"
