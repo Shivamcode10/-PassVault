@@ -1,0 +1,64 @@
+# =========================
+# 🔐 ENV FILES (VERY IMPORTANT)
+# =========================
+.env
+.env.local
+.env.development
+.env.production
+
+# =========================
+# 📦 NODE MODULES
+# =========================
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# =========================
+# 🏗 BUILD FILES
+# =========================
+dist/
+build/
+client/dist/
+server/dist/
+
+# =========================
+# 🧾 LOG FILES
+# =========================
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# 💻 SYSTEM FILES
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# 🧪 TEST / CACHE
+# =========================
+coverage/
+.cache/
+.vscode/
+.idea/
+
+# =========================
+# 🔑 SECRET FILES
+# =========================
+*.pem
+*.key
+*.crt
+
+# =========================
+# 🔥 OPTIONAL (KEEP CLEAN)
+# =========================
+package-lock.json
+yarn.lock
+
+# =========================
+# 🚫 MISC
+# =========================
+.tmp/
+.temp/
