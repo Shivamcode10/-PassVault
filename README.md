@@ -15,12 +15,14 @@ It focuses on **security, usability, and simplicity**, helping users avoid remem
 ## 🎨 Frontend  
 - HTML5  
 - CSS3  
-- JavaScript  
-- React.js *(remove if not used)*  
+- JavaScript
+- TypeScript
+- React.js  
 - Vercel (Deployment)
 
 ## ⚙️ Backend *(remove if not used)*  
-- Node.js  
+- Node.js
+- TypesSript
 - Express.js  
 - MongoDB  
 - Mongoose  
