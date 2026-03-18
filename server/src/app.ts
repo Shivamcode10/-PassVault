@@ -1,12 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
-import authRoutes from './routes/auth';
-import passwordRoutes from './routes/passwords';
-import userRoutes from './routes/user';
-import { errorHandler } from './middleware/errorHandler';
+import authRoutes from "./routes/auth";
+import passwordRoutes from "./routes/passwords";
+import userRoutes from "./routes/user";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
@@ -15,22 +15,34 @@ const app = express();
 // ✅ Helmet (secure headers)
 app.use(
   helmet({
-    crossOriginResourcePolicy: false, // fix frontend issues
+    crossOriginResourcePolicy: false,
   })
 );
 
-// ✅ CORS
+// ✅ CORS (FIXED FOR VERCEL + LOCAL)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://pass-vault-alpha.vercel.app", // 🔥 your frontend
+];
+
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? ["https://yourdomain.com"]
-        : ["http://localhost:5173", "http://localhost:3000"],
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("CORS not allowed"));
+      }
+    },
     credentials: true,
   })
 );
 
-// ✅ Rate Limiter (GLOBAL)
+// ✅ Rate Limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
   max: 100,
@@ -54,6 +66,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 app.use("/api/passwords", passwordRoutes);
 app.use("/api/user", userRoutes);
+
+/* ================= ROOT (IMPORTANT) ================= */
+
+app.get("/", (req, res) => {
+  res.send("PassVault Backend Running 🚀");
+});
 
 /* ================= HEALTH ================= */
 

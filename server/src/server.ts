@@ -2,39 +2,46 @@ import mongoose from "mongoose";
 import app from "./app";
 import dotenv from "dotenv";
 
-// Load env
+// Load environment variables
 dotenv.config();
 
+// ✅ Use Render PORT
 const PORT = process.env.PORT || 5000;
 
-// Start server
+// 🚀 Start Server Function
 const startServer = async () => {
   try {
-    // ✅ Connect DB (use your config function if exists)
-    await mongoose.connect(process.env.MONGODB_URI as string);
+    // ✅ Connect to MongoDB
+    if (!process.env.MONGODB_URI) {
+      throw new Error("❌ MONGODB_URI is not defined");
+    }
 
-    console.log("✅ Connected to MongoDB");
+    await mongoose.connect(process.env.MONGODB_URI);
 
+    console.log("✅ MongoDB connected");
+
+    // ✅ Start server
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📊 Health: http://localhost:${PORT}/api/health`);
     });
 
   } catch (error) {
-    console.error("❌ Server error:", error);
+    console.error("❌ Server startup error:", error);
     process.exit(1);
   }
 };
 
-// Global error handlers
+// 🔥 Handle unhandled promise rejections
 process.on("unhandledRejection", (err: any) => {
-  console.error("Unhandled Rejection:", err);
+  console.error("❌ Unhandled Rejection:", err);
   process.exit(1);
 });
 
+// 🔥 Handle uncaught exceptions
 process.on("uncaughtException", (err: any) => {
-  console.error("Uncaught Exception:", err);
+  console.error("❌ Uncaught Exception:", err);
   process.exit(1);
 });
 
+// Start server
 startServer();
